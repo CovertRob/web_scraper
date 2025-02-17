@@ -1,0 +1,30 @@
+# Directories
+/.vscode
+/build/.cmake
+/build/CMakeFiles
+/build/extensions
+/build/libcef_dll_wrapper
+/build/Release
+/build/Resources
+/build/tests
+/build/CMakeFiles
+/build/cef_cache
+
+# Compiled binaries
+*.exe
+*.out
+*.o
+*.so
+*.a
+*.dll
+*.html
+*.in
+*.json
+
+# CMake-generated files
+Makefile
+archive*.cpp
+*.cmake
+scraper
+CMakeCache.txt
+
