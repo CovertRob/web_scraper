@@ -12,7 +12,7 @@ I got tired of dealing with various job search sites and decided to build my own
 It is built in C++ for flexibility of incorporating C/C++ processing frameworks and in the future Pytorch's C++ beta API.
 
 ## Is it faster being in C++?
-I haven't done speed bench marking yet but regular HTML scrapers can't even handle javascript
+I haven't done speed bench marking yet but regular HTML scrapers can't even handle javascript and I didn't want to do it in Python because what's the fun if it's not challenging?
 
 ## Is it better than enterprise API's out there?
 It's certainly a lot cheaper because it costs $0 to run it locally
