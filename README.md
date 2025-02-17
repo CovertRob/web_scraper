@@ -26,7 +26,7 @@ Yes, I am only one man and learning the CEF is difficult...but not impossible
 ## What future plans do you have?
 - Configure for custom search parameters to be specified to the program via stdin
 - Configure for custom max/min scrape parameters for number of links to be scraped
-- 
-- Connect job aggregator public API endpoints
 - Implement data cleaning function to format the scraped HTML pages
+- Output formatted data into a JSON file to be ported into Pytorch project for analysis
+- Connect job aggregator public API endpoints
 - Implement various browsing signature techniques: cookie handling, proxy rotation
