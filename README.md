@@ -2,7 +2,7 @@
 Web scraper implemented in C++ with the Chromium Embedded Framework (CEF)
 
 ## How does it work?
-This web scraper runs on top of the CEF, an open source framework designed to embed web-based UI's into various application that is based off of the Chromium project.
+This web scraper runs on top of the CEF, an open source framework designed to embed web-based UI's into various applications that is based off of the Chromium project.
 It works by creating a new browser client (in this case a headless one aka no GUI) in which you programatically specify how it handled page loads, resource requests/responses, the content on those pages etc...
 It has a huge API and can be accessed at the following link: https://cef-builds.spotifycdn.com/docs/132.3/index.html. There are various binary packages you can download and build to get started.
 The version for this project is: 132.3.0+g8439bff+chromium-132.0.6834.57
