@@ -27,4 +27,5 @@ archive*.cpp
 *.cmake
 scraper
 CMakeCache.txt
+design_doc.md
 
