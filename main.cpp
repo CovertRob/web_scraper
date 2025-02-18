@@ -313,13 +313,52 @@ void JobPageScraperVisitor::Visit(const CefString& content) {
 }
 
 // ------------------ main -------------------------------------
+// Use flag --Search_Parameters to pass search parameters directly
 int main(int argc, char* argv[]) {
-    // CEF init
+
     CefMainArgs main_args(argc, argv);
+    // Don't parse flags if a sub-process
+    int exit_code = CefExecuteProcess(main_args, nullptr, nullptr);
+    if (exit_code >= 0) {
+        // This is a sub-process – just return immediately.
+        return exit_code;
+    }
+
+    // Note that CEF will restart main and pass sub-process flags to itself as needed so argc count will not remain constant. Must parse custom flags prior to initializing CEF otherwise they will be stripped.
+    using namespace std::literals;
+    std::string base_search_url = "https://www.google.com/search?q=";
+    std::string search_parameters;
+    std::string combined_url;
+    // Fetches an iterator starting at the --Search_Parameters flag position
+    // Remember that last position in array is a null pointer
+    if (argc > 1) {
+        auto flag = std::find_if(main_args.argv, main_args.argv + main_args.argc, 
+            [](const char* arg) {
+            return std::string_view(arg) == "--Search_Parameters"sv;
+        });
+        // Perform boundary checks
+        // Avoid comparing null ptrs
+        if (flag < main_args.argv + main_args.argc - 1) {
+            search_parameters = std::string(*(flag + 1));
+        }
+        combined_url = base_search_url + search_parameters;
+    }
+    
+    // To-Do: Add search_parameters.JSON file check here
+
+    if (combined_url == base_search_url) {
+        // Exit program if no parameters specified
+        std::cout << "Must specify search parameters. Exiting." << std::endl;
+        exit(0);
+    }
+    // If passing via CLI, take args as literal values
+    // Assumed to be URL encoded if need be
+
+    // CEF init
     CefSettings settings;
     settings.no_sandbox = true;
     settings.windowless_rendering_enabled = true;
-
+    settings.command_line_args_disabled = false;
     // Initialize CEF
     CefInitialize(main_args, settings, nullptr, nullptr);
 
@@ -332,15 +371,11 @@ int main(int argc, char* argv[]) {
     // Our custom client
     CefRefPtr<GoogleClient> client(new GoogleClient());
 
-    // Example Google query
-    std::string googleSearchUrl =
-        "https://www.google.com/search?q=software+engineer+\"job\"+\"description\"";
-
     // Create the browser
     CefBrowserHost::CreateBrowserSync(
         window_info,
         client.get(),
-        googleSearchUrl,
+        combined_url,
         browser_settings,
         nullptr,
         nullptr
