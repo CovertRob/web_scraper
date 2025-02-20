@@ -129,7 +129,13 @@ public:
         }
         else if (state_ == State::SCRAPING_JOBS) {
             // We loaded an actual job page -> grab the HTML
-            frame->GetSource(new JobPageScraperVisitor(this));
+            // GetSource is asynchronous
+
+            // Grab text
+            frame->GetText(new JobPageScraperVisitor(this));
+            // or
+            // Grab raw HTML
+            //frame->GetSource(new JobPageScraperVisitor(this));
         }
     }
 
