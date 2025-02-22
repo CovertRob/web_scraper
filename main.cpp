@@ -56,8 +56,7 @@ public:
           page_count_(0),
           max_pages_(3),
           state_(State::SEARCHING)
-    {
-    }
+    {}
 
     // Enumerations for states
     enum class State {
@@ -166,11 +165,12 @@ public:
             }
 
             // Once we've stored them for this page, either proceed to next or done
-            SleepMs(1500);
+            //SleepMs(1500);
             if (page_count_ < max_pages_) {
                 page_count_++;
                 NavigateToNextPage();
-            } else {
+            } 
+            else {
                 BeginScrapingLinks();
             }
         }
@@ -301,13 +301,28 @@ private:
 void JobPageScraperVisitor::Visit(const CefString& content) {
     static size_t s_fileIndex = 0;
     s_fileIndex++;
-
+    std::string current_url = this->client_->main_browser_->GetMainFrame()->GetURL();
     std::string html = content.ToString();
-    std::string filename = "job_page_" + std::to_string(s_fileIndex) + ".html";
 
-    std::ofstream ofs(filename);
+    if (html.empty()) {
+        std::cerr << "[JobPageScrapeVisitor] Warning: Content empty\n";
+        int url_size = current_url.size();
+        if (url_size >= 4 && current_url.substr(url_size-4) == ".pdf") {
+            std::cerr << "PDF link detected. Skipping\n";
+        }
+        client_->OnJobPageScraped();
+        return;
+    }
+    //std::string filename = "job_page_" + std::to_string(s_fileIndex) + ".html";
+    //For one file
+    std::string filename = "job_page_data.txt";
+
+    //For one file
+    std::ofstream ofs(filename, std::ios::app);
+    //Separate files
+    //std::ofstream ofs(filename);
     if (ofs) {
-        ofs << html;
+        ofs << html << "\n";
         ofs.close();
         std::cout << "[JobPageScraperVisitor] Saved HTML to " << filename << "\n";
     } else {
